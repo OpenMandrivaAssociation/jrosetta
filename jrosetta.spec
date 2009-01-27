@@ -1,12 +1,11 @@
 Summary:	JRosetta provides a common base for graphical component
 Name:		jrosetta
-Version:	1.0.1
+Version:	1.0.2
 Release:	%mkrel 0.0.1
 Group:		Development/Java
 License:	GPLv2+
 URL:		http://dev.artenum.com/projects/JRosetta
 Source0:	jrosetta-%{version}-GPL.zip
-Patch0:		jrosetta-1.0.1-rm_classpath.patch
 BuildRequires:	java-rpmbuild
 BuildRequires:	jpackage-utils >= 1.5
 BuildRequires:	ant
@@ -23,8 +22,7 @@ or command line.
 
 
 %prep
-%setup -q -n %{name}-%{version}-GPL
-%patch0 -p1 -b .rm_classpath
+%setup -q -n %{name}-%{version}-gpl
 
 #wrong-file-end-of-line-encoding
 cp -p CHANGE.txt CHANGE.txt.CRLF
