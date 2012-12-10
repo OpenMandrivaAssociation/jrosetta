@@ -50,3 +50,28 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc CHANGE.txt COPYRIGHT LICENSE.txt
 %{_javadir}/jrosetta*.jar
+
+
+%changelog
+* Mon Dec 06 2010 Oden Eriksson <oeriksson@mandriva.com> 1.0.2-0.0.4mdv2011.0
++ Revision: 612513
+- the mass rebuild of 2010.1 packages
+
+* Thu Apr 29 2010 Tomasz Pawel Gajc <tpg@mandriva.org> 1.0.2-0.0.3mdv2010.1
++ Revision: 540946
+- rebuild
+
+* Fri Sep 11 2009 Thierry Vignaud <tv@mandriva.org> 1.0.2-0.0.2mdv2010.0
++ Revision: 438066
+- rebuild
+
+* Tue Jan 27 2009 Tomasz Pawel Gajc <tpg@mandriva.org> 1.0.2-0.0.1mdv2009.1
++ Revision: 334588
+- update to new version 1.0.2
+- drop patch 0
+
+* Sun Nov 09 2008 Tomasz Pawel Gajc <tpg@mandriva.org> 1.0.1-0.0.1mdv2009.1
++ Revision: 301435
+- add source and spec files
+- Created package structure for jrosetta.
+
