@@ -1,4 +1,4 @@
-Summary:	JRosetta provides a common base for graphical component
+Summary:	Provides a common base for graphical component
 Name:		jrosetta
 Version:	1.0.2
 Release:	%mkrel 0.0.4
