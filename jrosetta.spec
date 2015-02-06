@@ -1,7 +1,7 @@
 Summary:	Provides a common base for graphical component
 Name:		jrosetta
 Version:	1.0.2
-Release:	%mkrel 0.0.4
+Release:	0.0.5
 Group:		Development/Java
 License:	GPLv2+
 URL:		http://dev.artenum.com/projects/JRosetta
