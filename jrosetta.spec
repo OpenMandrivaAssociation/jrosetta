@@ -1,18 +1,34 @@
-Summary:	Provides a common base for graphical component
-Name:		jrosetta
-Version:	1.0.2
-Release:	0.0.5
-Group:		Development/Java
-License:	GPLv2+
-URL:		http://dev.artenum.com/projects/JRosetta
-Source0:	jrosetta-%{version}-GPL.zip
-BuildRequires:	java-rpmbuild
-BuildRequires:	jpackage-utils >= 1.5
-BuildRequires:	ant
-Requires:	java >= 1.5
-Requires:	jpackage-utils >= 1.5
-BuildArch:	noarch
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+%{?_javapackages_macros:%_javapackages_macros}
+
+Name:           jrosetta
+Version:        1.0.4
+Release:        1
+Summary:        A common base to build a graphical console
+
+Group:          Development/Java
+License:        GPLv2
+URL:            http://dev.artenum.com/projects/JRosetta
+Source0:        http://maven.artenum.com/content/groups/public/com/artenum/%{name}/%{version}/%{name}-%{version}-sources.jar
+
+BuildArch:      noarch
+
+BuildRequires:  jpackage-utils
+BuildRequires:  java-devel
+BuildRequires:  maven-local
+
+BuildRequires:  maven-compiler-plugin
+BuildRequires:  maven-clean-plugin
+BuildRequires:  maven-dependency-plugin
+BuildRequires:  maven-install-plugin
+BuildRequires:  maven-jar-plugin
+BuildRequires:  maven-javadoc-plugin
+BuildRequires:  maven-release-plugin
+BuildRequires:  maven-resources-plugin
+BuildRequires:  maven-surefire-plugin
+BuildRequires:  maven-surefire-provider-junit4
+
+Requires:       jpackage-utils
+Requires:       java-headless
 
 %description
 JRosetta provides a common base for graphical component that could be used
@@ -20,58 +36,59 @@ to build a graphical console in Swing with the latest requirements, such as
 command history, completion and so on for instance for scripting language
 or command line.
 
+%package        javadoc
+Summary:        Javadocs for %{name}
+Group:          Documentation
+
+%description    javadoc
+This package contains the API documentation for %{name}.
 
 %prep
-%setup -q -n %{name}-%{version}-gpl
-
+%setup -q
+# remove jar format related directory
+rm -fr ../META-INF
 #wrong-file-end-of-line-encoding
 cp -p CHANGE.txt CHANGE.txt.CRLF
 sed -i -e 's/\r//' CHANGE.txt
 touch -r CHANGE.txt.CRLF CHANGE.txt
 rm CHANGE.txt.CRLF
+# remove deployement dependency
+%pom_xpath_remove "pom:build/pom:extensions" pom.xml
 
 %build
-%ant make
 
+%mvn_build
 
 %install
-rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_javadir}
 
-for j in jrosetta-API jrosetta-engine ; do
-  install -pm 0644 dist/${j}.jar %{buildroot}%{_javadir}/${j}-%{version}.jar
-  ln -fs ${j}-%{version}.jar %{buildroot}%{_javadir}/${j}.jar
-done
+cp -p modules/%{name}-api/target/%{name}-api-%{version}.jar \
+        %{buildroot}%{_javadir}/%{name}-api.jar
+# for compatibility
+ln -s %{name}-api.jar \
+        %{buildroot}%{_javadir}/%{name}-API.jar
+cp -p modules/%{name}-engine/target/%{name}-engine-%{version}.jar \
+        %{buildroot}%{_javadir}/%{name}-engine.jar
 
-%clean
-rm -rf %{buildroot}
+mkdir -p %{buildroot}%{_javadocdir}/%{name}
+cp -rp -t %{buildroot}%{_javadocdir}/%{name} target/site/apidocs/*
 
-%files
-%defattr(-,root,root)
-%doc CHANGE.txt COPYRIGHT LICENSE.txt
-%{_javadir}/jrosetta*.jar
+install -d -m 755 %{buildroot}%{_mavenpomdir}
+install -pm 644 pom.xml  \
+        %{buildroot}%{_mavenpomdir}/JPP-%{name}.pom
+install -pm 644 modules/%{name}-api/pom.xml  \
+        %{buildroot}%{_mavenpomdir}/JPP-%{name}-API.pom
+install -pm 644 modules/%{name}-engine/pom.xml  \
+        %{buildroot}%{_mavenpomdir}/JPP-%{name}-engine.pom
 
+%add_maven_depmap JPP-%{name}.pom
+%add_maven_depmap JPP-%{name}-API.pom %{name}-API.jar
+%add_maven_depmap JPP-%{name}-engine.pom %{name}-engine.jar
 
-%changelog
-* Mon Dec 06 2010 Oden Eriksson <oeriksson@mandriva.com> 1.0.2-0.0.4mdv2011.0
-+ Revision: 612513
-- the mass rebuild of 2010.1 packages
+%files -f .mfiles
+%{_javadir}/%{name}-api.jar
+%doc LICENSE.txt COPYRIGHT.txt CHANGE.txt
 
-* Thu Apr 29 2010 Tomasz Pawel Gajc <tpg@mandriva.org> 1.0.2-0.0.3mdv2010.1
-+ Revision: 540946
-- rebuild
-
-* Fri Sep 11 2009 Thierry Vignaud <tv@mandriva.org> 1.0.2-0.0.2mdv2010.0
-+ Revision: 438066
-- rebuild
-
-* Tue Jan 27 2009 Tomasz Pawel Gajc <tpg@mandriva.org> 1.0.2-0.0.1mdv2009.1
-+ Revision: 334588
-- update to new version 1.0.2
-- drop patch 0
-
-* Sun Nov 09 2008 Tomasz Pawel Gajc <tpg@mandriva.org> 1.0.1-0.0.1mdv2009.1
-+ Revision: 301435
-- add source and spec files
-- Created package structure for jrosetta.
-
+%files javadoc
+%{_javadocdir}/%{name}/
+%doc LICENSE.txt
