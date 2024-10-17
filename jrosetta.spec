@@ -7,7 +7,7 @@ Summary:        A common base to build a graphical console
 
 Group:          Development/Java
 License:        GPLv2
-URL:            http://dev.artenum.com/projects/JRosetta
+URL:            https://dev.artenum.com/projects/JRosetta
 Source0:        http://maven.artenum.com/content/groups/public/com/artenum/%{name}/%{version}/%{name}-%{version}-sources.jar
 
 BuildArch:      noarch
